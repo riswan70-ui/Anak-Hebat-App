@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7 Kebiasaan Anak Indonesia Hebat</title>
+    <title>7 Kebiasaan Anak Indonesia Hebat - Online</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -63,7 +62,6 @@
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="bg-white text-merah p-2 rounded-2xl shadow">
-                    <i class="fa-solid fa-flag-usa hidden"></i>
                     <i class="fa-solid fa-star text-2xl text-emas"></i>
                 </div>
                 <div>
@@ -74,7 +72,6 @@
 
             <!-- Mode Switcher & Stats -->
             <div class="flex items-center space-x-2 md:space-x-4">
-                <!-- User Mode Buttons -->
                 <div class="bg-merah-dark p-1 rounded-xl flex">
                     <button id="btn-mode-anak" onclick="switchView('anak')" class="px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all bg-white text-merah shadow">
                         <i class="fa-solid fa-child me-1"></i> Anak
@@ -86,6 +83,15 @@
             </div>
         </div>
     </header>
+
+    <!-- Connection Status Banner -->
+    <div id="online-status-bar" class="bg-slate-800 text-white py-2 px-4 text-xs font-sans text-center flex items-center justify-center space-x-2">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" id="status-indicator"></span>
+        <span id="status-text">Menghubungkan ke Cloud Database...</span>
+        <button onclick="openFamilyModal()" class="ml-2 bg-merah hover:bg-merah-dark px-2.5 py-1 rounded text-xs font-bold text-white transition">
+            <i class="fa-solid fa-key me-1"></i> Kode Keluarga
+        </button>
+    </div>
 
     <!-- Main Container -->
     <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow">
@@ -99,6 +105,7 @@
                 <div>
                     <h2 class="text-2xl font-bold" id="greeting-title">Halo, Jagoan Hebat!</h2>
                     <p class="text-sm text-red-100 font-sans" id="current-date">Hari, Tanggal</p>
+                    <p class="text-xs text-yellow-200 font-sans mt-0.5" id="family-code-display">Kode Keluarga: -</p>
                 </div>
             </div>
             
@@ -131,7 +138,7 @@
 
             <!-- List 7 Kebiasaan Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="habits-list">
-                <!-- Javascript will render the 7 habits dynamically -->
+                <!-- Rendered dynamically -->
             </div>
         </section>
 
@@ -141,8 +148,8 @@
             <div class="bg-white rounded-2xl p-6 border border-slate-100 custom-shadow">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                     <div>
-                        <h3 class="text-xl font-bold text-slate-800">Dasbor Pemantauan Orang Tua</h3>
-                        <p class="text-xs text-slate-500 font-sans">Rekap perkembangan kebiasaan karakter positif anak</p>
+                        <h3 class="text-xl font-bold text-slate-800">Dasbor Pemantauan Orang Tua (Real-Time)</h3>
+                        <p class="text-xs text-slate-500 font-sans">Pantau kebiasaan anak secara terhubung & langsung di cloud</p>
                     </div>
                     <div class="flex space-x-2">
                         <button onclick="resetTodayData()" class="px-3 py-1.5 text-xs font-sans bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">
@@ -154,19 +161,19 @@
                 <!-- Summary Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-blue-900">
-                        <div class="text-xs font-sans text-blue-600 mb-1">Capaian Minggu Ini</div>
-                        <div class="text-2xl font-bold" id="weekly-avg">85%</div>
-                        <div class="text-xs font-sans text-blue-600 mt-1">Konsistensi Sangat Baik</div>
+                        <div class="text-xs font-sans text-blue-600 mb-1">Status Sinkronisasi</div>
+                        <div class="text-xl font-bold text-blue-700" id="ortu-sync-status">Terhubung</div>
+                        <div class="text-xs font-sans text-blue-600 mt-1">Real-time Cloud Database</div>
                     </div>
                     <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-emerald-900">
-                        <div class="text-xs font-sans text-emerald-600 mb-1">Kebiasaan Teratur</div>
-                        <div class="text-2xl font-bold" id="best-habit">Bangun Pagi</div>
-                        <div class="text-xs font-sans text-emerald-600 mt-1">100% Selesai minggu ini</div>
+                        <div class="text-xs font-sans text-emerald-600 mb-1">Progress Capaian</div>
+                        <div class="text-2xl font-bold" id="ortu-completion-percent">0%</div>
+                        <div class="text-xs font-sans text-emerald-600 mt-1">Target 7 kebiasaan seharinya</div>
                     </div>
                     <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 text-amber-900">
                         <div class="text-xs font-sans text-amber-600 mb-1">Total Hadiah Terkumpul</div>
                         <div class="text-2xl font-bold" id="ortu-points-badge">0 Bintang</div>
-                        <div class="text-xs font-sans text-amber-600 mt-1">Dapat ditukar reward</div>
+                        <div class="text-xs font-sans text-amber-600 mt-1">Siap ditukar reward</div>
                     </div>
                 </div>
 
@@ -194,9 +201,9 @@
                         <h4 class="font-bold text-slate-700 mb-2">Catatan Apresiasi Orang Tua</h4>
                         <textarea id="parent-note" rows="3" class="w-full p-3 border border-slate-300 rounded-lg text-sm font-sans focus:outline-none focus:ring-2 focus:ring-merah" placeholder="Tuliskan kata-kata pujian atau motivasi untuk anak..."></textarea>
                         <button onclick="saveParentNote()" class="mt-2 bg-merah hover:bg-merah-dark text-white px-4 py-2 rounded-lg text-xs font-bold transition">
-                            Simpan Pesan Motivasiku
+                            Kirim Pesan Apresiasi (Cloud)
                         </button>
-                        <p id="note-saved-msg" class="text-xs text-hijau font-sans mt-1 hidden">✓ Pesan berhasil disimpan!</p>
+                        <p id="note-saved-msg" class="text-xs text-hijau font-sans mt-1 hidden">✓ Pesan berhasil dikirim ke perangkat Anak!</p>
                     </div>
 
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col justify-between">
@@ -209,7 +216,7 @@
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-slate-500 font-sans italic">
-                            *Integrasi data otomatis tersimpan di penyimpanan browser lokal.
+                            *Setiap perubahan oleh Anak/Orang Tua tersimpan otomatis secara Cloud.
                         </div>
                     </div>
                 </div>
@@ -221,17 +228,51 @@
     <!-- App Footer -->
     <footer class="bg-white border-t border-slate-200 py-4 text-center text-slate-500 text-xs font-sans">
         <p>Aplikasi 7 Kebiasaan Anak Indonesia Hebat &copy; 2026</p>
-        <p class="text-slate-400 mt-1">Bangkitkan Karakter Unggul & Mandiri Sejak Dini</p>
+        <p class="text-slate-400 mt-1">Terintegrasi Online & Real-time Cloud Storage</p>
     </footer>
+
+    <!-- Modal Kode Keluarga -->
+    <div id="family-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-red-100 text-merah rounded-full flex items-center justify-center mx-auto text-3xl mb-2">
+                    <i class="fa-solid fa-house-chimney-user"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800">Hubungkan Keluarga</h3>
+                <p class="text-xs text-slate-500 font-sans mt-1">Masukkan Kode Keluarga agar HP Anak dan HP Orang Tua terhubung secara otomatis.</p>
+            </div>
+            
+            <div class="space-y-3 font-sans">
+                <div>
+                    <label class="text-xs font-bold text-slate-700">Kode Unik Keluarga</label>
+                    <input type="text" id="family-code-input" class="w-full mt-1 p-3 border border-slate-300 rounded-xl text-center font-bold text-lg uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-merah" placeholder="Contoh: KELUARGA-123">
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="setCustomFamilyCode()" class="w-full bg-merah hover:bg-merah-dark text-white font-bold py-2.5 rounded-xl text-sm transition">
+                        Hubungkan Kode
+                    </button>
+                    <button onclick="generateRandomFamilyCode()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-sm transition">
+                        Buat Kode Baru
+                    </button>
+                </div>
+            </div>
+
+            <div class="pt-2 text-center">
+                <button onclick="closeFamilyModal()" class="text-xs font-bold text-slate-400 hover:text-slate-600">
+                    Batal / Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Custom Modal Popup Reward -->
     <div id="reward-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl transform transition-all scale-95" id="modal-content">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl transform transition-all scale-95">
             <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
                 🏆
             </div>
             <div>
-                <h3 class="text-2xl font-bold text-slate-800">Hebat Sekali!</h3>
+                <h3 class="text-2xl font-bold text-slate-800" id="modal-title">Hebat Sekali!</h3>
                 <p class="text-sm text-slate-600 font-sans mt-1" id="modal-message">Kamu telah menyelesaikan kebiasaan ini!</p>
             </div>
             <button onclick="closeModal()" class="w-full bg-merah hover:bg-merah-dark text-white font-bold py-3 rounded-xl transition shadow-lg">
@@ -240,122 +281,169 @@
         </div>
     </div>
 
-    <!-- Script Logic -->
+    <!-- Supabase JS Client Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
+        // =========================================================================
+        // 🔑 SUPABASE CONFIGURATION
+        // =========================================================================
+        const SUPABASE_URL = 'https://knylyohvkiueunitypxu.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'sb_publishable_QcqYF3tUrFSNsh3SH_Bi7Q_50fyT'; // Key Supabase Anda
+
+        // Inisialisasi Supabase Client
+        let supabaseClient = null;
+        try {
+            if (SUPABASE_ANON_KEY && typeof supabase !== 'undefined') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch(e) {
+            console.error("Supabase init error:", e);
+        }
+
         // Data 7 Kebiasaan Anak Indonesia Hebat
         const HABITS_DATA = [
-            {
-                id: 1,
-                title: "Bangun Pagi & Sholat/Ibadah",
-                desc: "Bangun tepat waktu, merapikan tempat tidur, dan beribadah.",
-                icon: "fa-sun",
-                color: "from-amber-400 to-orange-500",
-                badgeBg: "bg-amber-100 text-amber-700",
-                category: "Spiritual & Disiplin"
-            },
-            {
-                id: 2,
-                title: "Beribadah & Bersyukur",
-                desc: "Jalankan ibadah sesuai agama & ucapkan syukur harian.",
-                icon: "fa-hands-praying",
-                color: "from-blue-400 to-indigo-500",
-                badgeBg: "bg-blue-100 text-blue-700",
-                category: "Karakter"
-            },
-            {
-                id: 3,
-                title: "Makan Sehat & Gizi Seimbang",
-                desc: "Makan buah, sayur, minum air putih, dan berdoa sebelum makan.",
-                icon: "fa-apple-whole",
-                color: "from-emerald-400 to-green-600",
-                badgeBg: "bg-emerald-100 text-emerald-700",
-                category: "Kesehatan"
-            },
-            {
-                id: 4,
-                title: "Gemar Membaca & Belajar",
-                desc: "Membaca buku minimal 15-30 menit dan mengulang pelajaran.",
-                icon: "fa-book-open",
-                color: "from-purple-400 to-violet-600",
-                badgeBg: "bg-purple-100 text-purple-700",
-                category: "Kognitif"
-            },
-            {
-                id: 5,
-                title: "Olahraga / Aktivitas Fisik",
-                desc: "Bergerak aktif, senam, bermusik, atau berolahraga ceria.",
-                icon: "fa-person-running",
-                color: "from-rose-400 to-red-500",
-                badgeBg: "bg-rose-100 text-rose-700",
-                category: "Fisik"
-            },
-            {
-                id: 6,
-                title: "Membantu Orang Tua",
-                desc: "Membantu menyapu, cuci piring, atau merapikan mainan.",
-                icon: "fa-hand-holding-heart",
-                color: "from-pink-400 to-rose-500",
-                badgeBg: "bg-pink-100 text-pink-700",
-                category: "Social & Mandiri"
-            },
-            {
-                id: 7,
-                title: "Tidur Cepat & Istirahat Cukup",
-                desc: "Tidur malam tidak terlalu larut agar besok segar kembali.",
-                icon: "fa-moon",
-                color: "from-cyan-400 to-blue-600",
-                badgeBg: "bg-cyan-100 text-cyan-700",
-                category: "Istirahat"
-            }
+            { id: 1, title: "Bangun Pagi & Sholat/Ibadah", desc: "Bangun tepat waktu, merapikan tempat tidur, dan beribadah.", icon: "fa-sun", color: "from-amber-400 to-orange-500", badgeBg: "bg-amber-100 text-amber-700", category: "Spiritual & Disiplin" },
+            { id: 2, title: "Beribadah & Bersyukur", desc: "Jalankan ibadah sesuai agama & ucapkan syukur harian.", icon: "fa-hands-praying", color: "from-blue-400 to-indigo-500", badgeBg: "bg-blue-100 text-blue-700", category: "Karakter" },
+            { id: 3, title: "Makan Sehat & Gizi Seimbang", desc: "Makan buah, sayur, minum air putih, dan berdoa sebelum makan.", icon: "fa-apple-whole", color: "from-emerald-400 to-green-600", badgeBg: "bg-emerald-100 text-emerald-700", category: "Kesehatan" },
+            { id: 4, title: "Gemar Membaca & Belajar", desc: "Membaca buku minimal 15-30 menit dan mengulang pelajaran.", icon: "fa-book-open", color: "from-purple-400 to-violet-600", badgeBg: "bg-purple-100 text-purple-700", category: "Kognitif" },
+            { id: 5, title: "Olahraga / Aktivitas Fisik", desc: "Bergerak aktif, senam, bermusik, atau berolahraga ceria.", icon: "fa-person-running", color: "from-rose-400 to-red-500", badgeBg: "bg-rose-100 text-rose-700", category: "Fisik" },
+            { id: 6, title: "Membantu Orang Tua", desc: "Membantu menyapu, cuci piring, atau merapikan mainan.", icon: "fa-hand-holding-heart", color: "from-pink-400 to-rose-500", badgeBg: "bg-pink-100 text-pink-700", category: "Social & Mandiri" },
+            { id: 7, title: "Tidur Cepat & Istirahat Cukup", desc: "Tidur malam tidak terlalu larut agar besok segar kembali.", icon: "fa-moon", color: "from-cyan-400 to-blue-600", badgeBg: "bg-cyan-100 text-cyan-700", category: "Istirahat" }
         ];
 
-        // State Management
+        // Default State Aplikasi
         let appState = {
-            todayStatus: {}, // { habitId: { completed: boolean, time: string } }
+            familyCode: localStorage.getItem('anak_hebat_family_code') || ('KELUARGA-' + Math.floor(1000 + Math.random() * 9000)),
+            todayStatus: {},
             totalPoints: 0,
             parentNote: ""
         };
 
-        // Initialize Application
+        HABITS_DATA.forEach(h => {
+            appState.todayStatus[h.id] = { completed: false, time: '-' };
+        });
+
+        let realtimeSubscription = null;
+
+        // Inisialisasi Aplikasi pada saat window load
         window.onload = function() {
             setupDate();
-            loadState();
             renderHabitCards();
             updateUI();
+            
+            if (supabaseClient) {
+                subscribeToFamilyData();
+            } else {
+                updateStatusIndicator(false, "Modus Penyimpanan Lokal Browser");
+            }
         };
 
-        // Set Current Date Display
+        // Fungsi Sinkronisasi Data Real-Time Supabase
+        async function subscribeToFamilyData() {
+            if (!supabaseClient) return;
+
+            const familyCode = appState.familyCode;
+            document.getElementById('family-code-display').innerText = `Kode Keluarga: ${familyCode}`;
+            localStorage.setItem('anak_hebat_family_code', familyCode);
+
+            // Fetch Data Awal
+            try {
+                const { data, error } = await supabaseClient
+                    .from('family_habits')
+                    .select('*')
+                    .eq('family_code', familyCode)
+                    .maybeSingle();
+
+                if (data) {
+                    if (data.today_status) appState.todayStatus = data.today_status;
+                    if (data.total_points !== undefined) appState.totalPoints = data.total_points;
+                    if (data.parent_note !== undefined) {
+                        appState.parentNote = data.parent_note;
+                        document.getElementById('parent-note').value = data.parent_note;
+                    }
+                    renderHabitCards();
+                    updateUI();
+                } else {
+                    // Jika belum ada data keluarga ini, buat data baru di Supabase
+                    syncToCloud();
+                }
+            } catch (err) {
+                console.log("Subscription fetch error:", err);
+            }
+
+            updateStatusIndicator(true, "Terhubung Supabase Realtime");
+
+            // Lepas listener lama jika ada
+            if (realtimeSubscription) {
+                supabaseClient.removeChannel(realtimeSubscription);
+            }
+
+            // Dengarkan Perubahan Realtime secara Live
+            realtimeSubscription = supabaseClient
+                .channel(`public:family_habits:${familyCode}`)
+                .on('postgres_changes', { 
+                    event: '*', 
+                    schema: 'public', 
+                    table: 'family_habits',
+                    filter: `family_code=eq.${familyCode}`
+                }, (payload) => {
+                    if (payload.new) {
+                        if (payload.new.today_status) appState.todayStatus = payload.new.today_status;
+                        if (payload.new.total_points !== undefined) appState.totalPoints = payload.new.total_points;
+                        if (payload.new.parent_note !== undefined) {
+                            appState.parentNote = payload.new.parent_note;
+                            document.getElementById('parent-note').value = payload.new.parent_note;
+                        }
+                        renderHabitCards();
+                        updateUI();
+                    }
+                })
+                .subscribe();
+        }
+
+        // Push / Simpan Perubahan ke Database Supabase
+        async function syncToCloud() {
+            if (!supabaseClient) return;
+            const familyCode = appState.familyCode;
+
+            try {
+                await supabaseClient
+                    .from('family_habits')
+                    .upsert({
+                        id: familyCode,
+                        family_code: familyCode,
+                        today_status: appState.todayStatus,
+                        total_points: appState.totalPoints,
+                        parent_note: appState.parentNote
+                    });
+            } catch (err) {
+                console.error("Error Syncing to Supabase:", err);
+            }
+        }
+
+        function updateStatusIndicator(isOnline, text) {
+            const ind = document.getElementById('status-indicator');
+            const txt = document.getElementById('status-text');
+            if (isOnline) {
+                ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400";
+                txt.innerText = text;
+            } else {
+                ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-amber-400";
+                txt.innerText = text;
+            }
+        }
+
+        // Render UI Helpers
         function setupDate() {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const todayStr = new Date().toLocaleDateString('id-ID', options);
             document.getElementById('current-date').innerText = todayStr;
         }
 
-        // Load State from Local Storage
-        function loadState() {
-            const savedData = localStorage.getItem('anak_hebat_state');
-            if (savedData) {
-                appState = JSON.parse(savedData);
-            } else {
-                // Default Initialization
-                HABITS_DATA.forEach(h => {
-                    appState.todayStatus[h.id] = { completed: false, time: '-' };
-                });
-                appState.totalPoints = 0;
-                appState.parentNote = "";
-                saveState();
-            }
-            document.getElementById('parent-note').value = appState.parentNote || '';
-        }
-
-        // Save State to Local Storage
-        function saveState() {
-            localStorage.setItem('anak_hebat_state', JSON.stringify(appState));
-        }
-
-        // Render Habit Cards for Kids View
         function renderHabitCards() {
             const container = document.getElementById('habits-list');
+            if (!container) return;
             container.innerHTML = '';
 
             HABITS_DATA.forEach(habit => {
@@ -390,20 +478,17 @@
             });
         }
 
-        // Toggle Habit Completion
         function toggleHabit(id) {
             const currentStatus = appState.todayStatus[id]?.completed || false;
             const newStatus = !currentStatus;
             
             const now = new Date();
             const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} WIB`;
-
             appState.todayStatus[id] = {
                 completed: newStatus,
                 time: newStatus ? timeStr : '-'
             };
 
-            // Update Points
             if (newStatus) {
                 appState.totalPoints += 10;
                 triggerConfetti();
@@ -412,14 +497,12 @@
                 appState.totalPoints = Math.max(0, appState.totalPoints - 10);
             }
 
-            saveState();
+            syncToCloud();
             renderHabitCards();
             updateUI();
         }
 
-        // Update Header & Dashboard UI Data
         function updateUI() {
-            // Calculate Completed Count
             let completedCount = 0;
             Object.values(appState.todayStatus).forEach(item => {
                 if (item.completed) completedCount++;
@@ -428,22 +511,20 @@
             const totalHabits = HABITS_DATA.length;
             const percentage = Math.round((completedCount / totalHabits) * 100);
 
-            // Update Header Stats
             document.getElementById('daily-stars').innerText = `${completedCount} / ${totalHabits}`;
             document.getElementById('total-points').innerText = `${appState.totalPoints} ⭐`;
             
-            // Progress Bar
             document.getElementById('main-progress-bar').style.width = `${percentage}%`;
             document.getElementById('progress-percent').innerText = `${percentage}%`;
 
-            // Update Ortu Table & Badges
             renderOrtuTable();
             document.getElementById('ortu-points-badge').innerText = `${appState.totalPoints} Bintang`;
+            document.getElementById('ortu-completion-percent').innerText = `${percentage}%`;
         }
 
-        // Render Parent Monitoring Table
         function renderOrtuTable() {
             const tbody = document.getElementById('ortu-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             HABITS_DATA.forEach(habit => {
@@ -459,7 +540,7 @@
                             ? 'bg-emerald-100 text-emerald-700' 
                             : 'bg-amber-100 text-amber-700'
                         }">
-                            ${statusInfo.completed ? '✓ Belum/Selesai' : '⏳ Belum'}
+                            ${statusInfo.completed ? '✓ Selesai' : '⏳ Belum'}
                         </span>
                     </td>
                     <td class="p-3 text-xs text-slate-500">${statusInfo.time}</td>
@@ -468,7 +549,6 @@
             });
         }
 
-        // Switch View Modes (Anak vs Ortu)
         function switchView(mode) {
             const anakView = document.getElementById('view-anak');
             const ortuView = document.getElementById('view-ortu');
@@ -479,56 +559,69 @@
             if (mode === 'anak') {
                 anakView.classList.remove('hidden');
                 ortuView.classList.add('hidden');
-                
                 btnAnak.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all bg-white text-merah shadow";
                 btnOrtu.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all text-white hover:bg-red-700";
-                
                 greetingTitle.innerText = "Halo, Jagoan Hebat!";
             } else {
                 anakView.classList.add('hidden');
                 ortuView.classList.remove('hidden');
-                
                 btnOrtu.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all bg-white text-merah shadow";
                 btnAnak.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all text-white hover:bg-red-700";
-                
                 greetingTitle.innerText = "Pantau Kebiasaan Anak";
             }
         }
 
-        // Save Parent Note
         function saveParentNote() {
             const noteText = document.getElementById('parent-note').value;
             appState.parentNote = noteText;
-            saveState();
-
+            syncToCloud();
             const msg = document.getElementById('note-saved-msg');
             msg.classList.remove('hidden');
             setTimeout(() => msg.classList.add('hidden'), 3000);
         }
 
-        // Reset Today Data
         function resetTodayData() {
             HABITS_DATA.forEach(h => {
                 appState.todayStatus[h.id] = { completed: false, time: '-' };
             });
-            saveState();
+            syncToCloud();
             renderHabitCards();
             updateUI();
         }
 
-        // Trigger Confetti Animation
-        function triggerConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 80,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
+        // Modal Kode Keluarga
+        function openFamilyModal() {
+            document.getElementById('family-code-input').value = appState.familyCode;
+            document.getElementById('family-modal').classList.remove('hidden');
+        }
+
+        function closeFamilyModal() {
+            document.getElementById('family-modal').classList.add('hidden');
+        }
+
+        function setCustomFamilyCode() {
+            const inputVal = document.getElementById('family-code-input').value.trim().toUpperCase();
+            if (inputVal) {
+                appState.familyCode = inputVal;
+                closeFamilyModal();
+                subscribeToFamilyData();
             }
         }
 
-        // Modal Helpers
+        function generateRandomFamilyCode() {
+            const newCode = 'KELUARGA-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('family-code-input').value = newCode;
+        }
+
+        // Animation Confetti & Modal Reward
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+
         function showModal(title, msg) {
+            document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-message').innerText = msg;
             document.getElementById('reward-modal').classList.remove('hidden');
         }
