@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 Kebiasaan Anak Indonesia Hebat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        merah: {
+                            DEFAULT: '#E53935',
+                            dark: '#C62828',
+                            light: '#FFEBEE'
+                        },
+                        putih: '#FFFFFF',
+                        emas: '#FFB300',
+                        biru: '#1E88E5',
+                        hijau: '#43A047',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Fredoka', cursive, 'Inter', sans-serif;
+            background-color: #F4F6F9;
+        }
+        .custom-shadow {
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        .habit-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .habit-card:hover {
+            transform: translateY(-4px);
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="bg-merah text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-merah p-2 rounded-2xl shadow">
+                    <i class="fa-solid fa-flag-usa hidden"></i>
+                    <i class="fa-solid fa-star text-2xl text-emas"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Anak Indonesia Hebat</h1>
+                    <p class="text-xs text-red-100 font-sans">Pantau 7 Kebiasaan Baik Setiap Hari</p>
+                </div>
+            </div>
+
+            <!-- Mode Switcher & Stats -->
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <!-- User Mode Buttons -->
+                <div class="bg-merah-dark p-1 rounded-xl flex">
+                    <button id="btn-mode-anak" onclick="switchView('anak')" class="px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all bg-white text-merah shadow">
+                        <i class="fa-solid fa-child me-1"></i> Anak
+                    </button>
+                    <button id="btn-mode-ortu" onclick="switchView('ortu')" class="px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all text-white hover:bg-red-700">
+                        <i class="fa-solid fa-user-shield me-1"></i> Orang Tua
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow">
+
+        <!-- Banner Tanggal & Profil Ringkas -->
+        <div class="bg-gradient-to-r from-red-500 to-rose-600 rounded-3xl p-5 md:p-6 text-white mb-6 custom-shadow flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white flex items-center justify-center text-3xl">
+                    👦
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold" id="greeting-title">Halo, Jagoan Hebat!</h2>
+                    <p class="text-sm text-red-100 font-sans" id="current-date">Hari, Tanggal</p>
+                </div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 px-5 flex items-center space-x-6 w-full md:w-auto justify-around">
+                <div class="text-center">
+                    <div class="text-xs font-sans text-red-100">Bintang Hari Ini</div>
+                    <div class="text-2xl font-bold text-yellow-300" id="daily-stars">0 / 7</div>
+                </div>
+                <div class="h-8 w-px bg-white/20"></div>
+                <div class="text-center">
+                    <div class="text-xs font-sans text-red-100">Total Poin</div>
+                    <div class="text-2xl font-bold text-white" id="total-points">0 ⭐</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 1: MODE ANAK ================= -->
+        <section id="view-anak" class="space-y-6">
+            
+            <!-- Target Progress Box -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-100 custom-shadow">
+                <div class="flex justify-between items-center mb-2 font-sans">
+                    <span class="font-bold text-slate-700">Progress Kebiasaan Hari Ini</span>
+                    <span class="text-sm font-bold text-merah" id="progress-percent">0%</span>
+                </div>
+                <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden">
+                    <div id="main-progress-bar" class="bg-gradient-to-r from-amber-400 to-merah h-full rounded-full progress-bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- List 7 Kebiasaan Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="habits-list">
+                <!-- Javascript will render the 7 habits dynamically -->
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: MODE ORANG TUA (DASBOR) ================= -->
+        <section id="view-ortu" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 custom-shadow">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">Dasbor Pemantauan Orang Tua</h3>
+                        <p class="text-xs text-slate-500 font-sans">Rekap perkembangan kebiasaan karakter positif anak</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="resetTodayData()" class="px-3 py-1.5 text-xs font-sans bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">
+                            <i class="fa-solid fa-rotate-left me-1"></i> Reset Hari Ini
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-blue-900">
+                        <div class="text-xs font-sans text-blue-600 mb-1">Capaian Minggu Ini</div>
+                        <div class="text-2xl font-bold" id="weekly-avg">85%</div>
+                        <div class="text-xs font-sans text-blue-600 mt-1">Konsistensi Sangat Baik</div>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-emerald-900">
+                        <div class="text-xs font-sans text-emerald-600 mb-1">Kebiasaan Teratur</div>
+                        <div class="text-2xl font-bold" id="best-habit">Bangun Pagi</div>
+                        <div class="text-xs font-sans text-emerald-600 mt-1">100% Selesai minggu ini</div>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 text-amber-900">
+                        <div class="text-xs font-sans text-amber-600 mb-1">Total Hadiah Terkumpul</div>
+                        <div class="text-2xl font-bold" id="ortu-points-badge">0 Bintang</div>
+                        <div class="text-xs font-sans text-amber-600 mt-1">Dapat ditukar reward</div>
+                    </div>
+                </div>
+
+                <!-- Table Pemantauan 7 Kebiasaan -->
+                <h4 class="font-bold text-slate-700 mb-3 text-lg">Rincian Kebiasaan Hari Ini</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-sans text-xs">
+                                <th class="p-3">Kebiasaan</th>
+                                <th class="p-3">Kategori</th>
+                                <th class="p-3">Status Hari Ini</th>
+                                <th class="p-3">Waktu Penyelesaian</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ortu-table-body" class="font-sans text-sm divide-y divide-slate-100">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Parent Notes & Reward System -->
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">Catatan Apresiasi Orang Tua</h4>
+                        <textarea id="parent-note" rows="3" class="w-full p-3 border border-slate-300 rounded-lg text-sm font-sans focus:outline-none focus:ring-2 focus:ring-merah" placeholder="Tuliskan kata-kata pujian atau motivasi untuk anak..."></textarea>
+                        <button onclick="saveParentNote()" class="mt-2 bg-merah hover:bg-merah-dark text-white px-4 py-2 rounded-lg text-xs font-bold transition">
+                            Simpan Pesan Motivasiku
+                        </button>
+                        <p id="note-saved-msg" class="text-xs text-hijau font-sans mt-1 hidden">✓ Pesan berhasil disimpan!</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-700 mb-1">Manajemen Reward (Hadiah)</h4>
+                            <p class="text-xs text-slate-500 font-sans mb-3">Berikan apresiasi nyata saat bintang terkumpul.</p>
+                            <div class="flex items-center justify-between bg-white p-3 rounded-lg border">
+                                <span class="font-sans text-sm">Target Hadiah: <strong class="text-merah">Jalan-Jalan Akhir Pekan</strong></span>
+                                <span class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">50 Bintang</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-xs text-slate-500 font-sans italic">
+                            *Integrasi data otomatis tersimpan di penyimpanan browser lokal.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- App Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-slate-500 text-xs font-sans">
+        <p>Aplikasi 7 Kebiasaan Anak Indonesia Hebat &copy; 2026</p>
+        <p class="text-slate-400 mt-1">Bangkitkan Karakter Unggul & Mandiri Sejak Dini</p>
+    </footer>
+
+    <!-- Custom Modal Popup Reward -->
+    <div id="reward-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl transform transition-all scale-95" id="modal-content">
+            <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
+                🏆
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-slate-800">Hebat Sekali!</h3>
+                <p class="text-sm text-slate-600 font-sans mt-1" id="modal-message">Kamu telah menyelesaikan kebiasaan ini!</p>
+            </div>
+            <button onclick="closeModal()" class="w-full bg-merah hover:bg-merah-dark text-white font-bold py-3 rounded-xl transition shadow-lg">
+                Lanjutkan Beraksi! ⭐
+            </button>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // Data 7 Kebiasaan Anak Indonesia Hebat
+        const HABITS_DATA = [
+            {
+                id: 1,
+                title: "Bangun Pagi & Sholat/Ibadah",
+                desc: "Bangun tepat waktu, merapikan tempat tidur, dan beribadah.",
+                icon: "fa-sun",
+                color: "from-amber-400 to-orange-500",
+                badgeBg: "bg-amber-100 text-amber-700",
+                category: "Spiritual & Disiplin"
+            },
+            {
+                id: 2,
+                title: "Beribadah & Bersyukur",
+                desc: "Jalankan ibadah sesuai agama & ucapkan syukur harian.",
+                icon: "fa-hands-praying",
+                color: "from-blue-400 to-indigo-500",
+                badgeBg: "bg-blue-100 text-blue-700",
+                category: "Karakter"
+            },
+            {
+                id: 3,
+                title: "Makan Sehat & Gizi Seimbang",
+                desc: "Makan buah, sayur, minum air putih, dan berdoa sebelum makan.",
+                icon: "fa-apple-whole",
+                color: "from-emerald-400 to-green-600",
+                badgeBg: "bg-emerald-100 text-emerald-700",
+                category: "Kesehatan"
+            },
+            {
+                id: 4,
+                title: "Gemar Membaca & Belajar",
+                desc: "Membaca buku minimal 15-30 menit dan mengulang pelajaran.",
+                icon: "fa-book-open",
+                color: "from-purple-400 to-violet-600",
+                badgeBg: "bg-purple-100 text-purple-700",
+                category: "Kognitif"
+            },
+            {
+                id: 5,
+                title: "Olahraga / Aktivitas Fisik",
+                desc: "Bergerak aktif, senam, bermusik, atau berolahraga ceria.",
+                icon: "fa-person-running",
+                color: "from-rose-400 to-red-500",
+                badgeBg: "bg-rose-100 text-rose-700",
+                category: "Fisik"
+            },
+            {
+                id: 6,
+                title: "Membantu Orang Tua",
+                desc: "Membantu menyapu, cuci piring, atau merapikan mainan.",
+                icon: "fa-hand-holding-heart",
+                color: "from-pink-400 to-rose-500",
+                badgeBg: "bg-pink-100 text-pink-700",
+                category: "Social & Mandiri"
+            },
+            {
+                id: 7,
+                title: "Tidur Cepat & Istirahat Cukup",
+                desc: "Tidur malam tidak terlalu larut agar besok segar kembali.",
+                icon: "fa-moon",
+                color: "from-cyan-400 to-blue-600",
+                badgeBg: "bg-cyan-100 text-cyan-700",
+                category: "Istirahat"
+            }
+        ];
+
+        // State Management
+        let appState = {
+            todayStatus: {}, // { habitId: { completed: boolean, time: string } }
+            totalPoints: 0,
+            parentNote: ""
+        };
+
+        // Initialize Application
+        window.onload = function() {
+            setupDate();
+            loadState();
+            renderHabitCards();
+            updateUI();
+        };
+
+        // Set Current Date Display
+        function setupDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const todayStr = new Date().toLocaleDateString('id-ID', options);
+            document.getElementById('current-date').innerText = todayStr;
+        }
+
+        // Load State from Local Storage
+        function loadState() {
+            const savedData = localStorage.getItem('anak_hebat_state');
+            if (savedData) {
+                appState = JSON.parse(savedData);
+            } else {
+                // Default Initialization
+                HABITS_DATA.forEach(h => {
+                    appState.todayStatus[h.id] = { completed: false, time: '-' };
+                });
+                appState.totalPoints = 0;
+                appState.parentNote = "";
+                saveState();
+            }
+            document.getElementById('parent-note').value = appState.parentNote || '';
+        }
+
+        // Save State to Local Storage
+        function saveState() {
+            localStorage.setItem('anak_hebat_state', JSON.stringify(appState));
+        }
+
+        // Render Habit Cards for Kids View
+        function renderHabitCards() {
+            const container = document.getElementById('habits-list');
+            container.innerHTML = '';
+
+            HABITS_DATA.forEach(habit => {
+                const isDone = appState.todayStatus[habit.id]?.completed || false;
+
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl p-5 border ${isDone ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-100'} custom-shadow habit-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr ${habit.color} flex items-center justify-center text-white text-xl shadow-md">
+                                    <i class="fa-solid ${habit.icon}"></i>
+                                </div>
+                                <span class="text-xs px-2.5 py-1 rounded-full font-semibold font-sans ${habit.badgeBg}">
+                                    ${habit.category}
+                                </span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-lg mb-1">${habit.title}</h3>
+                            <p class="text-xs text-slate-500 font-sans leading-relaxed mb-4">${habit.desc}</p>
+                        </div>
+
+                        <button onclick="toggleHabit(${habit.id})" class="w-full py-3 px-4 rounded-xl font-bold font-sans flex items-center justify-center space-x-2 transition-all ${
+                            isDone 
+                            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md' 
+                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                        }">
+                            <i class="fa-solid ${isDone ? 'fa-circle-check text-lg' : 'fa-circle'}"></i>
+                            <span>${isDone ? 'Selesai! (+10 Poin)' : 'Tandai Selesai'}</span>
+                        </button>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        // Toggle Habit Completion
+        function toggleHabit(id) {
+            const currentStatus = appState.todayStatus[id]?.completed || false;
+            const newStatus = !currentStatus;
+            
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} WIB`;
+
+            appState.todayStatus[id] = {
+                completed: newStatus,
+                time: newStatus ? timeStr : '-'
+            };
+
+            // Update Points
+            if (newStatus) {
+                appState.totalPoints += 10;
+                triggerConfetti();
+                showModal("Luar Biasa! ✨", "Kamu telah menyelesaikan kebiasaan baik hari ini. Pertahankan ya!");
+            } else {
+                appState.totalPoints = Math.max(0, appState.totalPoints - 10);
+            }
+
+            saveState();
+            renderHabitCards();
+            updateUI();
+        }
+
+        // Update Header & Dashboard UI Data
+        function updateUI() {
+            // Calculate Completed Count
+            let completedCount = 0;
+            Object.values(appState.todayStatus).forEach(item => {
+                if (item.completed) completedCount++;
+            });
+
+            const totalHabits = HABITS_DATA.length;
+            const percentage = Math.round((completedCount / totalHabits) * 100);
+
+            // Update Header Stats
+            document.getElementById('daily-stars').innerText = `${completedCount} / ${totalHabits}`;
+            document.getElementById('total-points').innerText = `${appState.totalPoints} ⭐`;
+            
+            // Progress Bar
+            document.getElementById('main-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-percent').innerText = `${percentage}%`;
+
+            // Update Ortu Table & Badges
+            renderOrtuTable();
+            document.getElementById('ortu-points-badge').innerText = `${appState.totalPoints} Bintang`;
+        }
+
+        // Render Parent Monitoring Table
+        function renderOrtuTable() {
+            const tbody = document.getElementById('ortu-table-body');
+            tbody.innerHTML = '';
+
+            HABITS_DATA.forEach(habit => {
+                const statusInfo = appState.todayStatus[habit.id] || { completed: false, time: '-' };
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-800">${habit.title}</td>
+                    <td class="p-3 text-xs text-slate-500">${habit.category}</td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${
+                            statusInfo.completed 
+                            ? 'bg-emerald-100 text-emerald-700' 
+                            : 'bg-amber-100 text-amber-700'
+                        }">
+                            ${statusInfo.completed ? '✓ Belum/Selesai' : '⏳ Belum'}
+                        </span>
+                    </td>
+                    <td class="p-3 text-xs text-slate-500">${statusInfo.time}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Switch View Modes (Anak vs Ortu)
+        function switchView(mode) {
+            const anakView = document.getElementById('view-anak');
+            const ortuView = document.getElementById('view-ortu');
+            const btnAnak = document.getElementById('btn-mode-anak');
+            const btnOrtu = document.getElementById('btn-mode-ortu');
+            const greetingTitle = document.getElementById('greeting-title');
+
+            if (mode === 'anak') {
+                anakView.classList.remove('hidden');
+                ortuView.classList.add('hidden');
+                
+                btnAnak.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all bg-white text-merah shadow";
+                btnOrtu.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all text-white hover:bg-red-700";
+                
+                greetingTitle.innerText = "Halo, Jagoan Hebat!";
+            } else {
+                anakView.classList.add('hidden');
+                ortuView.classList.remove('hidden');
+                
+                btnOrtu.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all bg-white text-merah shadow";
+                btnAnak.className = "px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all text-white hover:bg-red-700";
+                
+                greetingTitle.innerText = "Pantau Kebiasaan Anak";
+            }
+        }
+
+        // Save Parent Note
+        function saveParentNote() {
+            const noteText = document.getElementById('parent-note').value;
+            appState.parentNote = noteText;
+            saveState();
+
+            const msg = document.getElementById('note-saved-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+
+        // Reset Today Data
+        function resetTodayData() {
+            HABITS_DATA.forEach(h => {
+                appState.todayStatus[h.id] = { completed: false, time: '-' };
+            });
+            saveState();
+            renderHabitCards();
+            updateUI();
+        }
+
+        // Trigger Confetti Animation
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // Modal Helpers
+        function showModal(title, msg) {
+            document.getElementById('modal-message').innerText = msg;
+            document.getElementById('reward-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('reward-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
